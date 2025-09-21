@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cozy Cabin Reads</title>
+  <style>
+    :root{
+      --deep:#493843;        /* deep purple-gray */
+      --muted:#6B7D7D;       /* muted gray */
+      --olive:#87AE73;       /* olive green */
+      --linen:#FEEE2;        /* light linen */
+      --sienna:#D5896F;      /* burnt sienna */
+      --ink:#1c1f20;
+      --maxw:1100px;
+      --radius:12px;
+      --shadow:0 10px 25px rgba(0,0,0,.15);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; 
+      padding-top: 70px;
+      color:#f4f4f2; 
+      background:url('Public/Images/Background2.png') center/cover no-repeat fixed; 
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    
+    /* Rain Canvas */
+    #rain{
+      position:fixed; top:0; left:0; width:100%; height:100%; 
+      pointer-events:none; z-index:0; opacity:0.7;
+    }
+    
+    /* Footer */
+    footer{
+      padding:40px 18px; 
+      background: linear-gradient(135deg, rgba(52, 78, 45, 0.95), rgba(39, 61, 34, 0.98));
+      text-align:center; 
+      position:relative; 
+      z-index:10;
+      color: #ffffff;
+      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(135, 174, 115, 0.5), transparent);
+    }
+    h1,h2,h3{font-family: Georgia, "Times New Roman", Times, serif; margin:0 0 .4rem}
+    h1{font-size: clamp(2rem, 5vw, 3.2rem); color:#f8f8f6; text-shadow: 2px 2px 8px rgba(0,0,0,0.7)}
+    h2{font-size: clamp(1.6rem, 3.2vw, 2.2rem)}
+    p{line-height:1.65}
+    a{color:var(--linen)}
+
+    /* COOL ENHANCED NAV */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(135, 174, 115, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(135, 174, 115, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: navSlideDown 0.6s ease forwards;
+    }
+
+    @keyframes navSlideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .navbar.scrolled {
+      background: rgba(135, 174, 115, 0.25);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      box-shadow: 0 8px 32px rgba(135, 174, 115, 0.2);
+      border-bottom: 1px solid rgba(135, 174, 115, 0.3);
+    }
+
+    .nav-container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Logo Styles */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.5rem;
+      font-family: Georgia, serif;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-text:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-icon {
+      font-size: 1.8rem;
+      animation: bookBounce 2s infinite;
+    }
+
+    @keyframes bookBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .logo-name {
+      background: linear-gradient(135deg, #ffffff, #a4d88a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: brightness(1.1);
+    }
+
+    /* Navigation Menu */
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      position: relative;
+      transition: all 0.3s ease;
+      border-radius: 25px;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--olive), var(--sienna));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .nav-link:hover::before,
+    .nav-link.active::before {
+      opacity: 0.8;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    
+    .nav-link:hover::before {
+      opacity: 1;
+      background: linear-gradient(135deg, #5a7a45, #4a6a35);
+    }
+
+    .nav-link.active {
+      color: #fff;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(135, 174, 115, 0.8);
+    }
+
+    .nav-text {
+      transition: letter-spacing 0.3s ease;
+      font-weight: 500;
+    }
+
+    .nav-link:hover .nav-text {
+      letter-spacing: 1px;
+    }
+
+    /* Navbar indicator line */
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--olive), var(--sienna));
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 80%;
+    }
+
+
+    /* Mobile Menu Toggle */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .nav-toggle .bar {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 3px 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 3px;
+    }
+
+    /* Hamburger Animation */
+    .nav-toggle.active .bar:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .nav-toggle.active .bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.active .bar:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+    /* Navbar progress indicator */
+    .navbar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #a4d88a, #87AE73);
+      width: var(--scroll-progress, 0%);
+      transition: width 0.1s ease;
+      box-shadow: 0 0 5px rgba(135, 174, 115, 0.5);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: rgba(135, 174, 115, 0.95);
+        backdrop-filter: blur(30px);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 40px rgba(135, 174, 115, 0.3);
+        padding: 2rem 0;
+        gap: 0;
+        border-radius: 0 0 20px 20px;
+      }
+      
+      .nav-menu.active {
+        left: 0;
+        animation: slideIn 0.3s ease;
+      }
+      
+      @keyframes slideIn {
+        from { 
+          opacity: 0;
+          transform: translateX(-100%);
+        }
+        to { 
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      .nav-item {
+        margin: 0.5rem 0;
+        animation: fadeInUp 0.5s ease forwards;
+        opacity: 0;
+      }
+      
+      .nav-menu.active .nav-item:nth-child(1) { animation-delay: 0.1s; }
+      .nav-menu.active .nav-item:nth-child(2) { animation-delay: 0.2s; }
+      .nav-menu.active .nav-item:nth-child(3) { animation-delay: 0.3s; }
+      .nav-menu.active .nav-item:nth-child(4) { animation-delay: 0.4s; }
+      .nav-menu.active .nav-item:nth-child(5) { animation-delay: 0.5s; }
+      
+      .nav-toggle {
+        display: flex;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* HERO - Updated to use your stormy cabin background */
+    .hero{position:relative; min-height:100vh; display:grid; place-items:center; text-align:center;}
+    .hero::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,0.3); z-index:1}
+    .hero > .content{position:relative; padding:2rem; max-width:800px; z-index:2}
+    .hero h1{color:#ffffff !important; text-shadow: 2px 2px 8px rgba(0,0,0,0.7) !important}
+    .cta{display:inline-block; margin-top:1rem; background:var(--olive); color:#0b140b; padding:.85rem 1.2rem; border-radius:999px; font-weight:800; text-decoration:none; box-shadow:var(--shadow); transition:all 0.3s ease}
+    .cta:hover{transform:translateY(-1px); background:#5a7a45; filter:brightness(0.85)}
+
+    /* SECTIONS */
+    section{padding:72px 18px}
+    .container{max-width:var(--maxw); margin:auto}
+
+    /* JOURNEY */
+    .journey{position:relative; color:#ffffff}
+    .journey::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,0.3); z-index:1}
+    .journey .container{position:relative; z-index:2}
+    .journey .card{background:rgba(13,17,19,0.9); color:#ffffff; border:1px solid #22292b; border-radius:var(--radius); box-shadow:var(--shadow); padding:1.2rem; backdrop-filter:blur(10px)}
+    .journey p{color:#ffffff !important; text-shadow:none !important}
+    .updates li{margin:.45rem 0; color:#cfd3d3}
+
+    /* BOOK RECS + QUIZ */
+    .recs{position:relative}
+    .recs::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,0.3); z-index:1}
+    .recs .container{position:relative; z-index:2}
+    .muted{color:#cfd3d3}
+    .quiz-embed{background:#111417; border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow)}
+    .quiz-embed iframe{display:block; width:100%; height:520px; border:0}
+
+    .quiz{background:#0f1315; border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:1rem; box-shadow:var(--shadow)}
+    .q{margin:1rem 0}
+    .q label{display:block; font-weight:700; margin-bottom:.35rem}
+    .q input[type="text"], .q select{width:100%; padding:.7rem .8rem; border-radius:10px; border:1px solid #2a3032; background:#121719; color:#eef1f1}
+    .choices{display:grid; gap:.5rem}
+    .choices label{display:flex; align-items:center; gap:.6rem; background:#14191b; border:1px solid #2a3032; padding:.6rem .7rem; border-radius:10px; cursor:pointer}
+    .choices input{accent-color: var(--olive)}
+
+    .btn{background:var(--olive); color:#0b140b; border:0; padding:.9rem 1.2rem; border-radius:12px; font-weight:800; cursor:pointer}
+    .btn-secondary{background:var(--muted); color:#ffffff}
+    .btn:hover{filter:brightness(0.85); background:#5a7a45}
+    .btn-secondary:hover{filter:brightness(0.85)}
+
+    /* INTERACTIVE QUIZ STYLES */
+    .quiz-progress{margin-bottom:2rem; text-align:center}
+    .progress-bar{width:100%; height:8px; background:#2a3032; border-radius:4px; overflow:hidden; margin-bottom:0.5rem}
+    .progress-fill{height:100%; background:var(--olive); width:14.28%; transition:width 0.3s ease; border-radius:4px}
+    .progress-text{color:#cfd3d3; font-size:0.9rem; font-weight:600}
+
+    .question-container{position:relative; min-height:200px}
+    .question{display:none; animation:fadeIn 0.3s ease-in-out}
+    .question.active{display:block}
+    .question label{display:block; font-weight:700; margin-bottom:1rem; color:#ffffff; font-size:1.1rem}
+    .question input[type="text"], .question select{width:100%; padding:0.8rem; border-radius:10px; border:1px solid #2a3032; background:#121719; color:#eef1f1; font-size:1rem}
+    .question .choices{display:grid; gap:0.8rem; margin-top:1rem}
+
+    .quiz-navigation{display:flex; justify-content:space-between; align-items:center; margin-top:2rem; gap:1rem}
+    .quiz-navigation .btn{min-width:120px}
+
+    @keyframes fadeIn{from{opacity:0; transform:translateX(20px)} to{opacity:1; transform:translateX(0)}}
+
+    /* RESULTS GRID */
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:40px; padding-top:20px;}
+    .card{background:rgba(13,17,19,0.9); border:1px solid #22292b; border-radius:var(--radius); overflow:visible; box-shadow:var(--shadow); transition:all 0.3s ease; backdrop-filter:blur(10px); position:relative;}
+    .card:hover{transform:translateY(-8px); box-shadow:0 15px 40px rgba(0,0,0,0.3)}
+    .cover{aspect-ratio:2/3; width:100%; display:block; background:#222; overflow:visible; position:relative; border-radius:var(--radius) var(--radius) 0 0;}
+    .cover img{transition:transform 0.3s ease}
+    .card:hover .cover img{transform:scale(1.05)}
+    .pad{padding:20px}
+    .title{font-family:Georgia,serif; font-size:1.2rem; font-weight:600; margin-bottom:8px; color:#f4f4f2; line-height:1.3}
+    .meta{color:#9da6a6; font-size:0.95rem; margin-bottom:15px; font-weight:500}
+    .review{
+      font-size:0.9rem; 
+      line-height:1.6; 
+      color:#f4f4f2;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .review:not(.expanded) {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .review.expanded {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+      display: block;
+    }
+    
+    .expand-indicator {
+      color: var(--olive);
+      font-size: 0.85rem;
+      font-style: italic;
+      display: inline;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .review:hover .expand-indicator {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .chip{display:inline-block; padding:.2rem .5rem; border-radius:999px; font-size:.75rem; margin:.2rem .25rem 0 0; background:#1d2a1b; color:#cfe3c7; border:1px solid #2c3e2a}
+
+    /* FAVORITES */
+    .favorites{position:relative}
+    .favorites::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,0.3); z-index:1}
+    .favorites .container{position:relative; z-index:2}
+
+    /* FOOTER */
+    footer{
+      padding:40px 18px; 
+      background: linear-gradient(135deg, rgba(52, 78, 45, 0.95), rgba(39, 61, 34, 0.98));
+      text-align:center;
+      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    footer a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    footer a:hover {
+      color: #a4d88a;
+      text-shadow: 0 0 10px rgba(164, 216, 138, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:720px){
+      .grid{grid-template-columns:repeat(2,1fr); gap:20px}
+      .pad{padding:15px}
+      .title{font-size:1.1rem}
+      /* Disable background-attachment on mobile for better performance */
+      .favorites{background-attachment:scroll}
+      /* Make journey section single column on mobile */
+      .journey div[style*="grid-template-columns"]{grid-template-columns:1fr !important; gap:1rem !important}
+      .journey div[style*="grid-template-columns"] img{max-width:250px !important; margin:0 auto !important}
+      /* Interactive Quiz Mobile Styles */
+      .quiz-navigation{flex-direction:column; gap:1rem}
+      .quiz-navigation .btn{width:100%; min-width:auto}
+      .question label{font-size:1rem}
+      .question .choices{gap:0.6rem}
+      .question-container{min-height:150px}
+    }
+    @media (min-width:1200px){
+      .grid{grid-template-columns:repeat(5,1fr)}
+    }
+    @media (min-width:768px) and (max-width:1199px){
+      .grid{grid-template-columns:repeat(3,1fr)}
+    }
+    
+    /* Prevent Flash of Unstyled Content - Start all animated elements hidden */
+    .journey-image,
+    .journey-fade,
+    .favorites-fade,
+    .book-card {
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+    
+    /* Journey Image Fade-in Animation */
+    .journey-image {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .journey-image.visible {
+      opacity: 1;
+      transform: translateY(0);
+      will-change: auto;
+    }
+    
+    /* Journey Section Content Animation */
+    .journey-fade {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .journey-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+      will-change: auto;
+    }
+    
+    /* Favorites Section Fade Animation */
+    .favorites-fade {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .favorites-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+      will-change: auto;
+    }
+    
+    /* Top 10 Book Cards Staggered Animation */
+    .book-card {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .book-card.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      will-change: auto;
+    }
+    
+    .book-card.visible:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Quiz Results - Always visible with fade-in animation */
+    #quiz-results .book-card {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      animation: fadeInUp 0.6s ease-out backwards;
+    }
+    
+    /* Erika's Pick Sticker Styles */
+    .book-sticker {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 70px;
+      height: 70px;
+      z-index: 10;
+      pointer-events: none;
+      animation: stickerPop 0.5s ease-out;
+      filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.4));
+    }
+    
+    .book-sticker img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform: rotate(12deg);
+    }
+    
+    @keyframes stickerPop {
+      from {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+    
+    .card:hover .book-sticker img {
+      transform: rotate(15deg) scale(1.1);
+      transition: transform 0.3s ease;
+    }
+    
+    /* Staggered animation for quiz results */
+    #quiz-results .book-card:nth-child(1) { animation-delay: 0.1s; }
+    #quiz-results .book-card:nth-child(2) { animation-delay: 0.2s; }
+    #quiz-results .book-card:nth-child(3) { animation-delay: 0.3s; }
+    #quiz-results .book-card:nth-child(4) { animation-delay: 0.4s; }
+    #quiz-results .book-card:nth-child(5) { animation-delay: 0.5s; }
+    #quiz-results .book-card:nth-child(6) { animation-delay: 0.6s; }
+    #quiz-results .book-card:nth-child(7) { animation-delay: 0.7s; }
+    #quiz-results .book-card:nth-child(8) { animation-delay: 0.8s; }
+    #quiz-results .book-card:nth-child(9) { animation-delay: 0.9s; }
+    #quiz-results .book-card:nth-child(10) { animation-delay: 1.0s; }
+    
+    #quiz-results .book-card:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Rain Animation Canvas -->
+  <canvas id="rain"></canvas>
+  
+  <!-- Cool Enhanced Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="#home" class="logo-text">
+          <span class="logo-icon">📚</span>
+          <span class="logo-name">Cozy Cabin Reads</span>
+        </a>
+      </div>
+      
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item">
+          <a href="#home" class="nav-link active" data-section="home">
+            <span class="nav-text">Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#my-journey" class="nav-link" data-section="my-journey">
+            <span class="nav-text">My Journey</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#favorites" class="nav-link" data-section="favorites">
+            <span class="nav-text">Favorites</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#quiz" class="nav-link" data-section="quiz">
+            <span class="nav-text">Quiz</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="nav-toggle" id="nav-toggle">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="home" aria-label="Hero">
+    <div class="content">
+      <h1>Welcome to My Corner of the Book World</h1>
+      <p class="muted">A place where rain taps on the window, stories come alive, and readers feel at home.</p>
+      <a class="cta" href="#my-journey">📚 My Journey</a>
+    </div>
+  </header>
+
+  <!-- MY JOURNEY -->
+  <section class="journey" id="my-journey">
+    <div class="container">
+        <h2 class="journey-fade">📝 Writing in the Rain</h2>
+      
+      <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; align-items: start; margin-bottom: 2rem;">
+        <div>
+            <p class="journey-fade" style="color:#2c3234">Hi my name is Erika Rigby. I've always loved the feeling of getting lost in a good book — but I also know what it's like to rush through school reading just for a grade. That gap between joy and obligation is what inspired my journey.</p>
+            <p class="journey-fade" style="color:#2c3234">I'm writing curriculum-ready fiction that teens actually want to read, and building a BookTube-style platform where students can share reviews, connect by chapter, and discover stories that feel alive.</p>
+            <p class="journey-fade" style="color:#2c3234">My mission is simple: spark a global teen reading revolution and help more students fall back in love with books. For me, this is about more than publishing a novel — it's about showing that reading can be exciting, relevant, and unforgettable.</p>
+        </div>
+          <div class="journey-fade" style="text-align: center;">
+              <div style="width: 300px; height: 400px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin: 0 auto; position: relative; overflow: hidden;">
+                <img src="Public/Images/Sefi with dog.jpg" alt="Sefi with dog" class="journey-image" id="journeyImage" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+          </div>
+        </div>
+      </div>
+      
+        <div class="card journey-fade">
+        <h3 style="margin-top:0">Latest Updates</h3>
+        <ul class="updates">
+          <li>Hit 3,000 words this week — the characters finally started arguing back.</li>
+          <li>Debating settings: keep the stormy castle or move it to the sea?</li>
+          <li>Outlining the BookTube pilot: "Finding a book that matches your vibe."</li>
+        </ul>
+        <a class="cta" href="https://youtube.com/@unicornpuppygirl1778?si=b9l-B0_KzoHSiT_0" style="background:var(--sienna); color:#2b0f0b">📺 Follow the Journey</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAVORITES / TOP 10 -->
+  <section id="favorites" class="favorites">
+    <div class="container favorites-content" id="favoritesContent">
+      <h2 class="favorites-fade">⭐ My Favorite Reads (Top 10)</h2>
+      <p class="muted favorites-fade">My personal favorites with detailed reviews.</p>
+      <div id="top10" class="grid favorites-fade"></div>
+    </div>
+  </section>
+
+  <!-- QUIZ (coded, not external) -->
+  <section id="quiz" class="recs" aria-label="Quiz">
+    <div class="container">
+      <h2>🎯 Find Your Perfect Read</h2>
+      <p class="muted">Answer a few questions. We'll match your vibe and pull real covers automatically.</p>
+      <form id="quizForm" class="quiz quiz-content">
+        <!-- Progress Bar -->
+        <div class="quiz-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="currentQuestion">1</span> of <span id="totalQuestions">7</span>
+          </div>
+        </div>
+
+        <!-- Question Container -->
+        <div class="question-container">
+          <!-- Question 1 -->
+          <div class="question active" data-question="1">
+            <label for="q1">What was the last book you gave ⭐⭐⭐⭐⭐?</label>
+            <input id="q1" name="q1" type="text" placeholder="Type the title" required />
+          </div>
+
+          <!-- Question 2 -->
+          <div class="question" data-question="2">
+            <label>What did you love most?</label>
+          <div class="choices">
+            <label><input type="radio" name="q2" value="romance" required> Romance / relationships</label>
+            <label><input type="radio" name="q2" value="action"> Action / adventure</label>
+            <label><input type="radio" name="q2" value="world"> Worldbuilding / setting</label>
+            <label><input type="radio" name="q2" value="themes"> Themes / ideas</label>
+            <label><input type="radio" name="q2" value="characters"> Characters / growth</label>
+          </div>
+        </div>
+
+          <!-- Question 3 -->
+          <div class="question" data-question="3">
+            <label>Go-to genre? (Select all that apply)</label>
+          <div class="choices">
+            <label><input type="checkbox" name="q3" value="romance"> Romance</label>
+            <label><input type="checkbox" name="q3" value="fantasy"> Fantasy</label>
+            <label><input type="checkbox" name="q3" value="scifi"> Sci‑Fi / Dystopian</label>
+            <label><input type="checkbox" name="q3" value="mystery"> Mystery / Thriller</label>
+            <label><input type="checkbox" name="q3" value="contemporary"> Contemporary</label>
+            <label><input type="checkbox" name="q3" value="light"> Lighthearted / Rom‑Com</label>
+          </div>
+        </div>
+
+          <!-- Question 4 -->
+          <div class="question" data-question="4">
+            <label>Biggest reading ick?</label>
+            <select name="q4" required>
+            <option value="none">None</option>
+            <option value="triangle">Love triangles</option>
+            <option value="slow">Slow pacing</option>
+            <option value="descriptive">Too much description</option>
+            <option value="instalove">Insta‑love</option>
+            <option value="predictable">Predictable endings</option>
+          </select>
+        </div>
+
+          <!-- Question 5 -->
+          <div class="question" data-question="5">
+            <label>Preferred length?</label>
+          <div class="choices">
+            <label><input type="radio" name="q5" value="short" required> Short (&lt; 300 pages)</label>
+            <label><input type="radio" name="q5" value="medium"> Medium (300–450)</label>
+            <label><input type="radio" name="q5" value="long"> Long (450+)</label>
+          </div>
+        </div>
+
+          <!-- Question 6 -->
+          <div class="question" data-question="6">
+            <label>Character you'd hang with?</label>
+          <div class="choices">
+            <label><input type="radio" name="q6" value="romantic" required> Hopeless romantic</label>
+            <label><input type="radio" name="q6" value="rebel"> Fierce rebel leader</label>
+            <label><input type="radio" name="q6" value="strategist"> Clever strategist</label>
+            <label><input type="radio" name="q6" value="loner"> Misunderstood loner</label>
+            <label><input type="radio" name="q6" value="comic"> Comic‑relief sidekick</label>
+          </div>
+        </div>
+
+          <!-- Question 7 -->
+          <div class="question" data-question="7">
+            <label>How do you want to feel at the end?</label>
+          <div class="choices">
+            <label><input type="radio" name="q7" value="happy" required> Happy / comforted</label>
+            <label><input type="radio" name="q7" value="edge"> On edge</label>
+            <label><input type="radio" name="q7" value="wrecked"> Wrecked but satisfied</label>
+            <label><input type="radio" name="q7" value="inspired"> Inspired / thoughtful</label>
+            <label><input type="radio" name="q7" value="calm"> Calm / reflective</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="quiz-navigation">
+          <button type="button" class="btn btn-secondary" id="prevBtn" style="display:none;">← Previous</button>
+          <button type="button" class="btn" id="nextBtn">Next →</button>
+          <button type="submit" class="btn" id="submitBtn" style="display:none;">Get Recommendations</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- QUIZ RESULTS -->
+  <section class="recs" id="quiz-results" style="display:none;">
+    <div class="container">
+      <h2>📖 Your Personalized Recommendations</h2>
+      <p class="muted">Based on your quiz answers, here are some books we think you'll love!</p>
+      <div id="results" class="grid" aria-live="polite"></div>
+      <div id="retake-section" style="display:none; text-align:center; margin-top:2rem;">
+        <p class="muted" style="margin-bottom:1rem;">Not feeling these recommendations? Your mood might have changed!</p>
+        <button class="btn" onclick="retakeQuiz()" style="background:var(--sienna); color:#2b0f0b;">🔄 Retake Quiz</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>"There is no friend as loyal as a book." — Hemingway</p>
+    <p><a href="https://youtube.com/@unicornpuppygirl1778?si=b9l-B0_KzoHSiT_0">BookTube</a> • <a href="https://www.instagram.com/ricky_paprika?igsh=MTNiazY3ODU5Yzg0aQ%3D%3D&utm_source=qr">Instagram</a></p>
+  </footer>
+
+  <script>
+    // ===== QUIZ FUNCTIONALITY =====
+    let currentQuestion = 1;
+    const totalQuestions = 7;
+    
+    function updateProgress() {
+      const progressFill = document.getElementById('progressFill');
+      const currentQuestionSpan = document.getElementById('currentQuestion');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      if (progressFill) progressFill.style.width = (currentQuestion / totalQuestions) * 100 + '%';
+      if (currentQuestionSpan) currentQuestionSpan.textContent = currentQuestion;
+      
+      // Show/hide navigation buttons
+      if (prevBtn) prevBtn.style.display = currentQuestion > 1 ? 'block' : 'none';
+      if (nextBtn) nextBtn.style.display = currentQuestion < totalQuestions ? 'block' : 'none';
+      if (submitBtn) submitBtn.style.display = currentQuestion === totalQuestions ? 'block' : 'none';
+    }
+    
+    function showQuestion(questionNum) {
+      // Hide all questions
+      document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+      // Show current question
+      const targetQuestion = document.querySelector(`[data-question="${questionNum}"]`);
+      if (targetQuestion) {
+        targetQuestion.classList.add('active');
+      }
+      updateProgress();
+    }
+    
+    function validateCurrentQuestion() {
+      const currentQ = document.querySelector(`[data-question="${currentQuestion}"]`);
+      if (!currentQ) return false;
+      
+      const requiredInputs = currentQ.querySelectorAll('[required]');
+      
+      for (let input of requiredInputs) {
+        if (input.type === 'checkbox') {
+          const checkboxes = currentQ.querySelectorAll(`input[name="${input.name}"]`);
+          const checked = Array.from(checkboxes).some(cb => cb.checked);
+          if (!checked) return false;
+        } else if (input.type === 'radio') {
+          const radios = currentQ.querySelectorAll(`input[name="${input.name}"]`);
+          const checked = Array.from(radios).some(r => r.checked);
+          if (!checked) return false;
+        } else if (!input.value.trim()) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // ===== MAIN INITIALIZATION =====
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 Page loaded, initializing everything...');
+      
+      // Test quiz elements
+      const quizForm = document.getElementById('quizForm');
+      const nextBtn = document.getElementById('nextBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      
+      console.log('Quiz form found:', !!quizForm);
+      console.log('Next button found:', !!nextBtn);
+      console.log('Previous button found:', !!prevBtn);
+      
+      // Initialize quiz navigation
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+          console.log('Next button clicked, current question:', currentQuestion);
+          if (validateCurrentQuestion()) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+            console.log('Moved to question:', currentQuestion);
+          } else {
+            alert('Please answer the current question before proceeding.');
+            console.log('Validation failed for question:', currentQuestion);
+          }
+        });
+      }
+      
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function() {
+          console.log('Previous button clicked, current question:', currentQuestion);
+          currentQuestion--;
+          showQuestion(currentQuestion);
+          console.log('Moved to question:', currentQuestion);
+        });
+      }
+      
+      // Initialize quiz
+      showQuestion(1);
+      
+      // Handle quiz form submission
+      if (quizForm) {
+        quizForm.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          console.log('Quiz form submitted!');
+          
+          const fd = new FormData(e.target);
+          const answers = {
+            q1: fd.get('q1')?.trim(),
+            q2: fd.get('q2'),
+            q3: fd.getAll('q3'),
+            q4: fd.get('q4'),
+            q5: fd.get('q5'),
+            q6: fd.get('q6'),
+            q7: fd.get('q7')
+          };
+          
+          console.log('Answers:', answers);
+          
+          const {bucket, query} = pickBucket(answers);
+          console.log('🎯 Selected bucket:', bucket, 'Query:', query);
+          
+          // Get curated recommendations
+          const curated = (BUCKETS[bucket]||[]).slice(0,3);
+          console.log('📖 Curated books:', curated);
+          
+          // Show loading message
+          const resultsMount = document.getElementById('results');
+          if (resultsMount) {
+            resultsMount.innerHTML = '<div style="text-align:center; padding:2rem; color:#cfd3d3;">🔍 Finding your perfect books...</div>';
+          }
+          
+          // Fetch additional books from Google Books API
+          console.log('🌐 Fetching additional recommendations...');
+          const extras = await fetchPopularExtras(query, 4);
+          console.log('📚 Extra books from API:', extras);
+
+          // If user gave a 5-star book, add a few "because you loved ___" picks via Google Books
+          let becauseLoved = [];
+          if(answers.q1 && answers.q1.length > 2){
+            console.log('💖 Fetching books similar to:', answers.q1);
+            becauseLoved = await fetchPopularExtras(answers.q1, 2);
+            becauseLoved.forEach(b=> b.tags=['Because you loved', answers.q1]);
+            console.log('💝 "Because you loved" books:', becauseLoved);
+          }
+
+          // Add tags to categorize books
+          curated.forEach(b=> b.tags=[`Our ${bucket} picks`]);
+          extras.forEach(b=> b.tags=[`Popular ${query}`]);
+
+          const results = [...curated, ...extras, ...becauseLoved];
+          console.log('🎉 Final results to display:', results);
+          
+          if (results.length === 0) {
+            console.error('❌ No results to display!');
+            if (resultsMount) {
+              resultsMount.innerHTML = '<div style="text-align:center; padding:2rem; color:#f4f4f2;">😔 Sorry, we couldn\'t find recommendations right now. Please try again!</div>';
+            }
+            return;
+          }
+          
+          const mount = document.getElementById('results');
+          if (!mount) {
+            console.error('❌ Results container not found!');
+            return;
+          }
+          
+          console.log('🎨 About to render books...');
+          await renderBooks(results, mount);
+          console.log('✅ renderBooks completed successfully!');
+          
+          // Show the results section
+          const resultsSection = document.getElementById('quiz-results');
+          if (resultsSection) {
+            resultsSection.style.display = 'block';
+            console.log('✅ Results section is now visible');
+            
+            // Debug results section visibility
+            console.log('📊 Results Section Debug:');
+            console.log('- Results section element:', resultsSection);
+            console.log('- Results section display:', window.getComputedStyle(resultsSection).display);
+            console.log('- Results section visibility:', window.getComputedStyle(resultsSection).visibility);
+            console.log('- Results section height:', window.getComputedStyle(resultsSection).height);
+          } else {
+            console.error('❌ Results section not found!');
+          }
+          
+          // Show retake section after results are displayed
+          const retakeSection = document.getElementById('retake-section');
+          if (retakeSection) {
+            retakeSection.style.display = 'block';
+          }
+          
+          // Scroll to results section
+          if (resultsSection) {
+            setTimeout(() => {
+              resultsSection.scrollIntoView({behavior:'smooth'});
+              console.log('📜 Scrolled to results section');
+            }, 100);
+          }
+        });
+      }
+      
+      // Handle all anchor links for smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const targetElement = document.getElementById(targetId);
+          
+          if (targetElement) {
+            const offsetTop = targetElement.offsetTop - 80; // Account for fixed nav
+            window.scrollTo({
+              top: offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Initialize rain animation
+      new RainAnimation();
+      
+      // Initialize journey section staggered animation
+      initializeJourneyAnimation();
+      
+      // Initialize Top 10 books staggered animation
+      initializeTop10Animation();
+      
+      console.log('✅ Everything initialized successfully!');
+    });
+    
+    // ===== JOURNEY SECTION STAGGERED ANIMATION =====
+    function initializeJourneyAnimation() {
+      const journeySection = document.getElementById('my-journey');
+      
+      if (!journeySection) return;
+      
+      let hasAnimated = false;
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !hasAnimated) {
+            hasAnimated = true;
+            
+            // Get all elements with journey-fade class
+            const journeyElements = journeySection.querySelectorAll('.journey-fade');
+            const journeyImage = document.getElementById('journeyImage');
+            
+            // Animate journey-fade elements with stagger
+            journeyElements.forEach((element, index) => {
+              // Stagger the animation - each element appears 150ms after the previous one
+              setTimeout(() => {
+                element.classList.add('visible');
+              }, 50 + (index * 150));
+            });
+            
+            // Animate the image separately (it has its own animation class)
+            if (journeyImage) {
+              setTimeout(() => {
+                journeyImage.classList.add('visible');
+              }, 50 + (journeyElements.length * 150)); // After all other elements
+            }
+            
+          } else if (!entry.isIntersecting) {
+            // Reset when leaving the section
+            hasAnimated = false;
+            const journeyElements = journeySection.querySelectorAll('.journey-fade');
+            const journeyImage = document.getElementById('journeyImage');
+            
+            journeyElements.forEach(element => {
+              element.classList.remove('visible');
+            });
+            if (journeyImage) {
+              journeyImage.classList.remove('visible');
+            }
+          }
+        });
+      }, {
+        threshold: 0.2, // Trigger when 20% of the section is visible
+        rootMargin: '0px 0px -50px 0px' // Start animation slightly before section is fully visible
+      });
+      
+      observer.observe(journeySection);
+    }
+    
+    // ===== TOP 10 BOOKS STAGGERED ANIMATION =====
+    function initializeTop10Animation() {
+      const favoritesSection = document.getElementById('favorites');
+      
+      if (!favoritesSection) return;
+      
+      let hasAnimated = false; // Prevent multiple animations
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !hasAnimated) {
+            hasAnimated = true;
+            
+            // First animate the section headers with favorites-fade class
+            const favoriteElements = favoritesSection.querySelectorAll('.favorites-fade');
+            
+            favoriteElements.forEach((element, index) => {
+              // Stagger the animation - each element appears 150ms after the previous one
+              setTimeout(() => {
+                element.classList.add('visible');
+              }, 50 + (index * 150));
+            });
+            
+            // Then animate book cards after the section elements
+            setTimeout(() => {
+              animateBookCards();
+            }, 50 + (favoriteElements.length * 150));
+            
+          } else if (!entry.isIntersecting) {
+            // When leaving the section, reset everything
+            hasAnimated = false;
+            const favoriteElements = favoritesSection.querySelectorAll('.favorites-fade');
+            favoriteElements.forEach(element => {
+              element.classList.remove('visible');
+            });
+            resetBookCards();
+          }
+        });
+      }, {
+        threshold: 0.3, // Trigger when 30% of the section is visible
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      observer.observe(favoritesSection);
+    }
+    
+    // Animate individual book cards with staggered timing
+    function animateBookCards() {
+      const bookCards = document.querySelectorAll('.book-card');
+      
+      if (bookCards.length === 0) {
+        console.log('No book cards found, retrying...');
+        setTimeout(animateBookCards, 200);
+        return;
+      }
+      
+      console.log('Animating', bookCards.length, 'book cards with staggered timing');
+      
+      bookCards.forEach((card, index) => {
+        // Stagger the animation - each card appears 150ms after the previous one
+        setTimeout(() => {
+          card.classList.add('visible');
+          console.log('Animating card', index + 1);
+        }, index * 150);
+      });
+    }
+    
+    // Reset all book cards to hidden state
+    function resetBookCards() {
+      const bookCards = document.querySelectorAll('.book-card');
+      bookCards.forEach(card => {
+        card.classList.remove('visible');
+      });
+    }
+    
+    // ===== COOL ENHANCED NAV FUNCTIONALITY =====
+    const navbar = document.getElementById('navbar');
+    const navMenu = document.getElementById('nav-menu');
+    const navToggle = document.getElementById('nav-toggle');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('header[id], section[id], footer[id]');
+    
+    // Mobile menu toggle with animation
+    if (navToggle) {
+      navToggle.addEventListener('click', function() {
+        navMenu.classList.toggle('active');
+        navToggle.classList.toggle('active');
+        
+        // Animate menu items
+        if (navMenu.classList.contains('active')) {
+          const navItems = navMenu.querySelectorAll('.nav-item');
+          navItems.forEach((item, index) => {
+            setTimeout(() => {
+              item.style.opacity = '1';
+              item.style.transform = 'translateY(0)';
+            }, index * 100);
+          });
+        }
+      });
+    }
+    
+    // Close mobile menu when link is clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
+      });
+    });
+    
+    // Navbar scroll effects
+    let lastScroll = 0;
+    const scrollThreshold = 100;
+    
+    window.addEventListener('scroll', function() {
+      const currentScroll = window.pageYOffset;
+      
+      // Add scrolled class for navbar styling
+      if (currentScroll > scrollThreshold) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      
+      // Hide/show navbar on scroll
+      if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
+        // Scrolling down
+        navbar.style.transform = 'translateY(-100%)';
+      } else {
+        // Scrolling up
+        navbar.style.transform = 'translateY(0)';
+      }
+      
+      lastScroll = currentScroll;
+      
+      // Update scroll progress indicator
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      navbar.style.setProperty('--scroll-progress', scrolled + '%');
+    });
+    
+    // Active section highlight with Intersection Observer
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const currentId = e.target.id;
+          console.log('Section in view:', currentId); // Debug log
+          
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + currentId) {
+              link.classList.add('active');
+              console.log('Activating link:', link.textContent); // Debug log
+            }
+          });
+        }
+      })
+    }, {threshold:.3, rootMargin:'-100px 0px -50px 0px'});
+    
+    sections.forEach(el=>{
+      console.log('Observing element:', el.id); // Debug log
+      obs.observe(el);
+    });
+    
+    // Smooth scroll to section when nav link clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetSection = document.getElementById(targetId);
+        
+        if (targetSection) {
+          const offsetTop = targetSection.offsetTop - 70;
+          
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // Add hover effects to nav items
+    navLinks.forEach(link => {
+      link.addEventListener('mouseenter', function() {
+        const otherLinks = document.querySelectorAll('.nav-link:not(:hover)');
+        otherLinks.forEach(otherLink => {
+          otherLink.style.opacity = '0.5';
+        });
+      });
+      
+      link.addEventListener('mouseleave', function() {
+        navLinks.forEach(link => {
+          link.style.opacity = '1';
+        });
+      });
+    });
+
+    // ===== UTIL: Cover fetching =====
+    const olByISBN = (isbn, size='L') => `https://covers.openlibrary.org/b/isbn/${isbn}-${size}.jpg`;
+    async function googleThumbByQuery(q){
+      try{
+        console.log(`🔍 Searching for cover image: "${q}"`);
+        const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=1&printType=books&projection=lite&orderBy=relevance`;
+        
+        const r = await fetch(url);
+        if (!r.ok) {
+          console.warn(`⚠️ Google Books API error: ${r.status}`);
+          return null;
+        }
+        
+        const d = await r.json();
+        const img = d?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail || d?.items?.[0]?.volumeInfo?.imageLinks?.smallThumbnail;
+        
+        if (img) {
+          console.log('✅ Found cover image via Google Books');
+          return img.replace('http://','https://');
+        } else {
+          console.log('⚠️ No cover image found in Google Books');
+          return null;
+        }
+      } catch(error) {
+        console.error('💥 Error in googleThumbByQuery:', error);
+        return null;
+      }
+    }
+
+    function placeholderSVG(title='No cover'){
+      return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 600'><rect width='100%' height='100%' fill='%23111618'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239da6a6' font-family='Georgia,serif' font-size='22'>${encodeURIComponent(title)}</text></svg>`
+    }
+
+    async function resolveCover(book){
+      console.log(`🖼️ Resolving cover for "${book.title}"...`);
+      
+      // First try: existing cover URL
+      if(book.coverUrl && book.coverUrl.length > 10) {
+        console.log('✅ Using existing cover URL');
+        return book.coverUrl;
+      }
+      
+      // Second try: ISBN lookup
+      if(book.isbn) {
+        console.log('📚 Trying ISBN lookup');
+        const isbnCover = olByISBN(book.isbn);
+        // Test if ISBN cover loads
+        try {
+          const response = await fetch(isbnCover, { method: 'HEAD' });
+          if (response.ok) {
+            console.log('✅ ISBN cover found');
+            return isbnCover;
+          }
+        } catch (e) {
+          console.log('⚠️ ISBN cover not available');
+        }
+      }
+      
+      // Third try: Google Books search
+      console.log('🔍 Searching Google Books for cover');
+      const googleCover = await googleThumbByQuery(`${book.title} ${book.author || ''}`);
+      if (googleCover) {
+        console.log('✅ Google Books cover found');
+        return googleCover;
+      }
+      
+      // Fallback: placeholder
+      console.log('🖼️ Using placeholder cover');
+      return placeholderSVG(book.title);
+    }
+
+    // ===== CURATED buckets for instant results (popular picks) =====
+    const BUCKETS = {
+      romance: [
+        {title:'Better Than the Movies', author:'Lynn Painter', isbn:'1534467635', amazon:'https://www.amazon.com/s?k=Better+Than+the+Movies+Lynn+Painter'},
+        {title:'Today Tonight Tomorrow', author:'Rachel Lynn Solomon', isbn:'1534440243', amazon:'https://www.amazon.com/s?k=Today+Tonight+Tomorrow+Rachel+Lynn+Solomon'},
+        {title:'The Summer I Turned Pretty', author:'Jenny Han', isbn:'1416968296', amazon:'https://www.amazon.com/s?k=The+Summer+I+Turned+Pretty+Jenny+Han'}
+      ],
+      fantasy: [
+        {title:'Throne of Glass', author:'Sarah J. Maas', isbn:'1619630346', amazon:'https://www.amazon.com/s?k=Throne+of+Glass+Sarah+J+Maas'},
+        {title:'Legendborn', author:'Tracy Deonn', isbn:'1534441606', amazon:'https://www.amazon.com/s?k=Legendborn+Tracy+Deonn'},
+        {title:'Six of Crows', author:'Leigh Bardugo', isbn:'1627792120', amazon:'https://www.amazon.com/s?k=Six+of+Crows+Leigh+Bardugo'}
+      ],
+      scifi: [
+        {title:'Scythe', author:'Neal Shusterman', isbn:'1442472421', amazon:'https://www.amazon.com/s?k=Scythe+Neal+Shusterman'},
+        {title:'Warcross', author:'Marie Lu', isbn:'0399547967', amazon:'https://www.amazon.com/s?k=Warcross+Marie+Lu'},
+        {title:'The Hunger Games', author:'Suzanne Collins', isbn:'0439023483', amazon:'https://www.amazon.com/s?k=The+Hunger+Games+Suzanne+Collins'}
+      ],
+      mystery: [
+        {title:'A Good Girl\'s Guide to Murder', author:'Holly Jackson', isbn:'1984896393', amazon:'https://www.amazon.com/s?k=A+Good+Girls+Guide+to+Murder+Holly+Jackson'},
+        {title:'Truly Devious', author:'Maureen Johnson', isbn:'0062338056', amazon:'https://www.amazon.com/s?k=Truly+Devious+Maureen+Johnson'},
+        {title:'One of Us Is Lying', author:'Karen M. McManus', isbn:'1524714682', amazon:'https://www.amazon.com/s?k=One+of+Us+Is+Lying+Karen+McManus'}
+      ],
+      emotional: [
+        {title:'They Both Die at the End', author:'Adam Silvera', isbn:'0062457802', amazon:'https://www.amazon.com/s?k=They+Both+Die+at+the+End+Adam+Silvera'},
+        {title:'If He Had Been With Me', author:'Laura Nowlin', isbn:'1402277829', amazon:'https://www.amazon.com/s?k=If+He+Had+Been+With+Me+Laura+Nowlin'},
+        {title:'The Song of Achilles', author:'Madeline Miller', isbn:'0062060627', amazon:'https://www.amazon.com/s?k=The+Song+of+Achilles+Madeline+Miller'}
+      ],
+      light: [
+        {title:'Tweet Cute', author:'Emma Lord', isbn:'1250237327', amazon:'https://www.amazon.com/s?k=Tweet+Cute+Emma+Lord'},
+        {title:'Love & Gelato', author:'Jenna Evans Welch', isbn:'1481432559', amazon:'https://www.amazon.com/s?k=Love+and+Gelato+Jenna+Evans+Welch'},
+        {title:'The Upside of Falling', author:'Alex Light', isbn:'0062918050', amazon:'https://www.amazon.com/s?k=The+Upside+of+Falling+Alex+Light'}
+      ]
+    };
+
+    // Map quiz answers to a primary bucket + search query for extra popular titles
+    function pickBucket(answers){
+      // start from preferences
+      const genres = answers.q3; // array
+      const map = { romance:'romance', fantasy:'fantasy', scifi:'scifi', mystery:'mystery', contemporary:'emotional', light:'light' };
+      for(const g of genres||[]) if(map[g]) return {bucket: map[g], query:g};
+      // fallback by Q2
+      const byQ2 = { romance:'romance', action:'fantasy', world:'fantasy', themes:'scifi', characters:'emotional' };
+      return {bucket: byQ2[answers.q2] || 'romance', query: byQ2[answers.q2] || 'romance'};
+    }
+
+    // Render a grid of cards into a container
+    async function renderBooks(list, mount){
+      console.log(`🎨 Rendering ${list.length} books to results...`);
+      
+      if (!mount) {
+        console.error('❌ Mount element not found!');
+        return;
+      }
+      
+      if (!list || list.length === 0) {
+        console.warn('⚠️ No books to render');
+        mount.innerHTML = '<div style="text-align:center; padding:2rem; color:#f4f4f2;">😔 No recommendations found. Please try retaking the quiz!</div>';
+        return;
+      }
+      
+      const frag = document.createDocumentFragment();
+      
+       for(let i = 0; i < list.length; i++){
+         const b = list[i];
+         console.log(`📋 Rendering book ${i + 1}:`, b.title, 'by', b.author);
+         
+         const card = document.createElement('article'); 
+         // Check if this is for quiz results or top 10
+         const isQuizResult = mount.id === 'results';
+         card.className = isQuizResult ? 'card book-card visible' : 'card book-card';
+         card.style.position = 'relative'; // Ensure relative positioning for sticker
+         console.log(`📋 Creating card element for "${b.title}"`);
+        
+        // Create cover container div
+        const coverDiv = document.createElement('div');
+        coverDiv.className = 'cover';
+        coverDiv.style.position = 'relative';
+        coverDiv.style.overflow = 'visible';
+        
+        const img = document.createElement('img'); 
+        img.alt = `${b.title} cover`;
+        img.loading='lazy'; 
+        img.decoding='async';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        
+        try {
+          img.src = await resolveCover(b);
+        } catch (error) {
+          console.warn(`⚠️ Failed to resolve cover for "${b.title}":`, error);
+          img.src = placeholderSVG(b.title);
+        }
+        
+        img.onerror = ()=> {
+          console.log(`🖼️ Using placeholder for "${b.title}"`);
+          img.src = placeholderSVG(b.title);
+        };
+        
+        // Add image to cover container
+        coverDiv.appendChild(img);
+        
+        // Check if this book is an Erika's Pick and add sticker (ONLY for quiz results, not Top 10)
+        if (isQuizResult && isErikasPick(b.title)) {
+          const sticker = document.createElement('div');
+          sticker.className = 'book-sticker';
+          sticker.innerHTML = '<img src="Public/Images/ErikasPick.png" alt="Erika\'s Pick" />';
+          coverDiv.appendChild(sticker);
+          console.log(`⭐ Added Erika's Pick sticker to recommended book: "${b.title}"`);
+        }
+        
+        const pad = document.createElement('div'); pad.className='pad';
+        const t = document.createElement('div'); t.className='title'; t.textContent = b.title;
+        const m = document.createElement('div'); m.className='meta'; m.textContent = b.author || 'Unknown Author';
+        const review = document.createElement('div'); review.className='review'; 
+        const reviewText = b.review || b.description || 'A great read waiting to be discovered!';
+        
+        // Create a span for the text content
+        const textSpan = document.createElement('span');
+        textSpan.textContent = reviewText;
+        review.appendChild(textSpan);
+        
+        // Add expand indicator if text is long enough (lowered threshold for better UX)
+        if (reviewText.length > 100) {
+          review.classList.add('show-more');
+          const indicator = document.createElement('span');
+          indicator.className = 'expand-indicator';
+          indicator.textContent = ' (click to expand)';
+          
+          // Add click handler to toggle expansion
+          review.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event bubbling
+            this.classList.toggle('expanded');
+            const indicatorEl = this.querySelector('.expand-indicator');
+            if (indicatorEl) {
+              if (this.classList.contains('expanded')) {
+                indicatorEl.textContent = ' (click to collapse)';
+              } else {
+                indicatorEl.textContent = ' (click to expand)';
+              }
+            }
+          });
+          
+          review.appendChild(indicator);
+        }
+        
+        const tags = document.createElement('div');
+        (b.tags||['Recommended']).forEach(tag=>{ 
+          const s=document.createElement('span'); 
+          s.className='chip'; 
+          s.textContent=tag; 
+          tags.appendChild(s);
+        });
+        
+        // Add Amazon link button
+        const amazonBtn = document.createElement('a');
+        amazonBtn.href = b.amazon || `https://www.amazon.com/s?k=${encodeURIComponent(b.title + ' ' + (b.author || ''))}`;
+        amazonBtn.target = '_blank';
+        amazonBtn.rel = 'noopener noreferrer';
+        amazonBtn.style.cssText = 'display: inline-block; margin: 10px 0; padding: 8px 16px; background: linear-gradient(135deg, #FF9900, #FFB84D); color: #000; font-weight: 600; font-size: 0.9rem; text-decoration: none; border-radius: 20px; box-shadow: 0 2px 10px rgba(255, 153, 0, 0.3); transition: all 0.3s ease;';
+        amazonBtn.textContent = '📦 View on Amazon';
+        amazonBtn.onmouseover = function() { 
+          this.style.background = 'linear-gradient(135deg, #E88800, #FF9900)'; 
+          this.style.transform = 'scale(1.05)';
+        };
+        amazonBtn.onmouseout = function() { 
+          this.style.background = 'linear-gradient(135deg, #FF9900, #FFB84D)'; 
+          this.style.transform = 'scale(1)';
+        };
+        
+        pad.append(t,m,amazonBtn,review,tags); 
+        card.append(coverDiv,pad); 
+        frag.append(card);
+        
+        console.log(`✅ Card created for "${b.title}" - Element:`, card);
+      }
+      
+       mount.innerHTML=''; 
+       mount.append(frag);
+      
+      // Debug: Check what's actually in the DOM
+      console.log('✅ Successfully rendered all books!');
+      console.log('📊 DOM Debug Info:');
+      console.log('- Mount element:', mount);
+      console.log('- Mount innerHTML length:', mount.innerHTML.length);
+      console.log('- Mount children count:', mount.children.length);
+      console.log('- Mount display style:', window.getComputedStyle(mount).display);
+      console.log('- Mount visibility:', window.getComputedStyle(mount).visibility);
+      console.log('- Mount opacity:', window.getComputedStyle(mount).opacity);
+      
+      // Force a repaint
+      mount.style.display = 'none';
+      mount.offsetHeight; // Trigger reflow
+      mount.style.display = '';
+      
+      return Promise.resolve();
+    }
+
+    // Optional: augment curated list with Google Books for popularity
+    async function fetchPopularExtras(query, max=4){
+      try{
+        console.log(`🔍 Fetching popular books for query: "${query}"`);
+        const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=${max}&orderBy=relevance&printType=books`;
+        console.log('📡 API URL:', url);
+        
+        const r = await fetch(url);
+        
+        if (!r.ok) {
+          console.error('❌ API request failed:', r.status, r.statusText);
+          return [];
+        }
+        
+        const d = await r.json();
+        console.log('📚 API Response:', d);
+        
+        if (!d.items || d.items.length === 0) {
+          console.warn('⚠️ No books found for query:', query);
+          return [];
+        }
+        
+        const books = d.items.map(it=>({
+          title: it.volumeInfo?.title || 'Untitled',
+          author: (it.volumeInfo?.authors||[]).join(', ') || 'Unknown Author',
+          coverUrl: (it.volumeInfo?.imageLinks?.thumbnail||'').replace('http://','https://'),
+          description: it.volumeInfo?.description || ''
+        }));
+        
+        console.log(`✅ Successfully fetched ${books.length} books:`, books);
+        return books;
+      } catch(error) {
+        console.error('💥 Error fetching popular books:', error);
+        return [];
+      }
+    }
+
+    // REMOVED: Duplicate event listener - this was causing conflicts with the main quiz handler above
+
+    // Retake quiz function
+    function retakeQuiz() {
+      console.log('🔄 Retaking quiz...');
+      
+      // Clear the form
+      const quizForm = document.getElementById('quizForm');
+      if (quizForm) quizForm.reset();
+      
+      // Clear the results
+      const results = document.getElementById('results');
+      if (results) results.innerHTML = '';
+      
+      // Hide the results section
+      const resultsSection = document.getElementById('quiz-results');
+      if (resultsSection) {
+        resultsSection.style.display = 'none';
+        console.log('🙈 Results section hidden');
+      }
+      
+      // Hide the retake section
+      const retakeSection = document.getElementById('retake-section');
+      if (retakeSection) retakeSection.style.display = 'none';
+      
+      // Reset quiz navigation state
+      currentQuestion = 1;
+      showQuestion(1);
+      
+      // Scroll back to quiz
+      const quizSection = document.getElementById('quiz');
+      if (quizSection) {
+        quizSection.scrollIntoView({behavior:'smooth'});
+      }
+      
+      // Focus on first input for better UX
+      const firstInput = document.getElementById('q1');
+      if (firstInput) {
+      setTimeout(() => {
+          firstInput.focus();
+      }, 500);
+      }
+    }
+
+    // Erika's Pick Books List
+    const ERIKAS_PICKS = [
+      'Fourth Wing', 'Iron Flame', 'All I Want for Christmas', 'King of Sloth', 'Onyx Storm',
+      'Trials of Apollo: The Dark Prophecy', 'Trails of Apollo: The Dark Prophecy',
+      'Trials of Apollo: The Burning Maze', 'Trails of Apollo: The Burning Maze',
+      'Deep End', 'Trials of Apollo: The Tyrant\'s Tomb', 'Trails of Apollo: The Tyrant\'s Tomb',
+      'Haunting Adeline', 'Hunting Adeline', 'Maus 1', 'The Fall Risk', 'The Nightingale',
+      'Maus 2', 'Wild Side', 'Tower of Nero', 'Fearless', 'Say You\'ll Remember Me',
+      'The Naturals', 'Killer Instinct', 'All In', 'Bad Blood', 'Twelve', 'The Striker',
+      'King of Envy', 'Bride', 'Not in Love', 'My Friends', 'Queen\'s Gambit',
+      'Throne of Glass', 'Crown of Midnight', 'Heir of Fire', 'Queen of Shadows',
+      'Empire of Storms', 'Tower of Dawn', 'Kingdom of Ash', 'Assassin\'s Blade',
+      'Beartown', 'Seven Year Slip', 'Wild Card', 'Book Lovers', 'Shadow and Bone',
+      'Siege and Storm', 'Ruin and Rising', 'Six of Crows', 'Crooked Kingdom',
+      'Love, Theoretically', 'Love Theoretically', 'Happy Ever After Playlist',
+      'Love Hypothesis', 'The Bodyguard', 'Shatter Me', 'Yours Truly', 'Unravel Me',
+      'Loathe to Love You', 'Under One Roof', 'Stuck With You', 'Below Zero',
+      'Part of Your World', 'Highly Suspicious and Unfairly Cute', 'Love on the Brain',
+      'Dungeons and Drama', 'The Inheritance Games', 'The Hawthorne Legacy',
+      'The Final Gambit', 'The Brothers Hawthorne', 'Better Than the Movies',
+      'Little White Lies', 'The Do Over', 'Just for the Summer', 'Deadly Little Scandals',
+      'Cruel Prince', 'Wicked King', 'Queen of Nothing', 'Wild Love', 'Two Year Vacation',
+      'Twisted Love', 'Twisted Games', 'Twisted Hate', 'Twisted Lies', 'Grandest Game',
+      'Archer\'s Voice', 'Flawless', 'Ignite Me', 'Icebreaker', 'Divine Rivals',
+      'Ruthless Vows', 'Wild Eyes', 'The Pumpkin Spice Café', 'The Pumpkin Spice Cafe',
+      'Cinnamon Bun Bookstore', 'Eleanor and Park', 'Eleanor & Park', 'Games Untold',
+      'Powerless', 'Reckless', 'Lord of the Flies', 'Powerful',
+      'The Wrath of the Triple Goddess', 'Dance of Thieves', 'Vow of Thieves',
+      'King of Wrath', 'Heartstopper 1', 'Heartstopper 2', 'Heartstopper 3',
+      'Heartstopper 4', 'King of Pride', 'King of Greed'
+    ];
+    
+    // Function to check if a book is Erika's Pick
+    function isErikasPick(title) {
+      if (!title) return false;
+      const normalizedTitle = title.trim().toLowerCase();
+      return ERIKAS_PICKS.some(pick => {
+        const normalizedPick = pick.trim().toLowerCase();
+        return normalizedTitle === normalizedPick || 
+               normalizedTitle.includes(normalizedPick) ||
+               normalizedPick.includes(normalizedTitle);
+      });
+    }
+
+    // TOP 10 books with real recommendations
+    const TOP10 = [
+      {title:'My Friends', author:'Fredrik Backman', review:'The language is stunning. If you need a heart-wrenching read that tears you apart and puts you back together at the same time, this is it. The unexpected twists and character arcs got me every time; it\'s carefully crafted and easily one of the best books I\'ve ever read.', tags:['Literary Fiction', 'Emotional']},
+      {title:'The Inheritance Games', author:'Jennifer Lynn Barnes', review:'I love the twists, the characters, and the mystery. I read it over a year ago and still think about it every day. The story clicks together in a beautiful chain of events that leads to an amazing conclusion.', tags:['Mystery', 'Thriller']},
+      {title:'Powerless', author:'Lauren Roberts', review:'This book was everything. I was skeptical about the hype, but it completely delivers. The plot and characters are fantastic, and they work together in a spectacular way.', tags:['Fantasy', 'Romance']},
+      {title:'The Queen\'s Gambit', author:'Walter Tevis', review:'The first book I ever felt was worth annotating. Watching this character grow through her journey is incredible, and the ending is the only way a masterpiece like this could close.', tags:['Literary Fiction', 'Character Study']},
+      {title:'Eleanor & Park', author:'Rainbow Rowell', review:'This book has my heart forever. I often find myself on the closet floor rereading lines. The young love here fixes and breaks your heart over and over again. Un-put-down-able and a must-read.', tags:['Contemporary', 'Young Adult']},
+      {title:'Daughter of the Pirate King', author:'Tricia Levenseller', review:'One of the books that got me into reading. I loved seeing a female Jack Sparrow beat up some dudes. The romance subplot gave me even more to be excited about—I absolutely love this book.', tags:['Fantasy', 'Adventure']},
+      {title:'Six of Crows', author:'Leigh Bardugo', review:'The found-family energy is incredible. The heist is thrilling, and the twists and turns kept me hooked.', tags:['Fantasy', 'Heist']},
+      {title:'Blade of Secrets', author:'Tricia Levenseller', review:'A fresh take on a female main character who\'s brilliant and also a total bada**. I love her—and the romance subplot.', tags:['Fantasy', 'Strong Female Lead']},
+      {title:'Check & Mate', author:'Ali Hazelwood', review:'A perfect YA that shows the ins and outs of chess and young love—one of my favorites from this author.', tags:['Young Adult', 'Contemporary']},
+      {title:'The Nightingale', author:'Kristin Hannah', review:'An amazing story of two sisters surviving in an oppressive world, coping differently and finding ways to live during World War II.', tags:['Historical Fiction', 'WWII']}
+    ];
+    // Render books and set up initial animation state
+    renderBooks(TOP10, document.getElementById('top10')).then(() => {
+      // Ensure all book cards start in hidden state
+      const bookCards = document.querySelectorAll('.book-card');
+      bookCards.forEach(card => {
+        card.classList.remove('visible');
+      });
+    });
+    // ===== RAIN ANIMATION SYSTEM =====
+    class RainAnimation {
+      constructor() {
+        this.canvas = document.getElementById('rain');
+        if (!this.canvas) return;
+        
+        this.ctx = this.canvas.getContext('2d');
+        this.drops = [];
+        this.dropCount = 150;
+        this.init();
+        this.animate();
+      }
+      
+      init() {
+        this.resizeCanvas();
+        this.createDrops();
+        window.addEventListener('resize', () => this.handleResize());
+      }
+      
+      resizeCanvas() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+      
+      handleResize() {
+        this.resizeCanvas();
+        this.createDrops();
+      }
+      
+      createDrops() {
+        this.drops = [];
+        for (let i = 0; i < this.dropCount; i++) {
+          this.drops.push({
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            length: Math.random() * 20 + 10,
+            speed: Math.random() * 3 + 2,
+            opacity: Math.random() * 0.6 + 0.2,
+            thickness: Math.random() * 1.5 + 0.5
+          });
+        }
+      }
+      
+      updateDrops() {
+        this.drops.forEach(drop => {
+          drop.y += drop.speed;
+          
+          if (drop.y > this.canvas.height) {
+            drop.y = -drop.length;
+            drop.x = Math.random() * this.canvas.width;
+            drop.speed = Math.random() * 3 + 2;
+            drop.opacity = Math.random() * 0.6 + 0.2;
+          }
+        });
+      }
+      
+      drawDrops() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.drops.forEach(drop => {
+          this.ctx.beginPath();
+          this.ctx.moveTo(drop.x, drop.y);
+          this.ctx.lineTo(drop.x, drop.y + drop.length);
+          this.ctx.strokeStyle = `rgba(255, 255, 255, ${drop.opacity})`;
+          this.ctx.lineWidth = drop.thickness;
+          this.ctx.lineCap = 'round';
+          this.ctx.stroke();
+        });
+      }
+      
+      animate() {
+        this.updateDrops();
+        this.drawDrops();
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+    
+    // Initialize everything when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize rain animation
+      new RainAnimation();
+      
+      // Initialize image fade-in animation
+      initializeImageFadeIn();
+    });
+    
+    // Image Fade-in Animation
+    function initializeImageFadeIn() {
+      // Set up animation for Journey section image
+      setupSectionAnimation('my-journey', 'journeyImage');
+      
+      // Set up animation for Favorites section with individual book cards
+      setupFavoritesAnimation();
+      
+      // Set up animation for Quiz section form
+      setupSectionAnimation('quiz', 'quizForm');
+    }
+    
+    // Generic function to set up section animations
+    function setupSectionAnimation(sectionId, elementId) {
+      const section = document.getElementById(sectionId);
+      const element = document.getElementById(elementId);
+      
+      if (!section || !element) return;
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Remove visible class first to reset animation
+            element.classList.remove('visible');
+            
+            // Small delay to ensure the reset takes effect
+            setTimeout(() => {
+              // Add visible class to trigger fade-in animation
+              element.classList.add('visible');
+            }, 50);
+          } else {
+            // When leaving the section, remove visible class to reset for next time
+            element.classList.remove('visible');
+          }
+        });
+      }, {
+        threshold: 0.3, // Trigger when 30% of the section is visible
+        rootMargin: '0px 0px -50px 0px' // Start animation slightly before section is fully visible
+      });
+      
+      observer.observe(section);
+    }
+    
+    // Special animation for Favorites section with individual book cards
+    function setupFavoritesAnimation() {
+      const favoritesSection = document.getElementById('favorites');
+      
+      if (!favoritesSection) return;
+      
+      let hasAnimated = false; // Prevent multiple animations
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !hasAnimated) {
+            hasAnimated = true;
+            
+            // Immediately animate individual book cards with staggered timing
+            animateBookCards();
+            
+          } else if (!entry.isIntersecting) {
+            // When leaving the section, reset everything
+            hasAnimated = false;
+            resetBookCards();
+          }
+        });
+      }, {
+        threshold: 0.3,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      observer.observe(favoritesSection);
+    }
+
+  </script>
+</body>
+</html>

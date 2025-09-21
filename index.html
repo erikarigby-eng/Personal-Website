@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Welcome to my corner of the book world - A cozy place for book recommendations and reading inspiration">
+    <title>Book Corner - Find Your Next Read</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Cool Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#" class="logo-text">
+                    <span class="logo-icon">📚</span>
+                    <span class="logo-name">Book Corner</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-section="home">
+                        <span class="nav-text">Home</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#books" class="nav-link" data-section="books">
+                        <span class="nav-text">My Picks</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#writing" class="nav-link" data-section="writing">
+                        <span class="nav-text">Writing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#quiz" class="nav-link" data-section="quiz">
+                        <span class="nav-text">Quiz</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Section 1: Hero Section -->
+    <section class="hero-section section-1" id="home">
+        <div class="section-overlay">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to my corner of the book world.</h1>
+                <p class="hero-subtitle">A place where rain taps on the window, stories come alive, and readers feel at home.</p>
+                <a href="#quiz" class="cta-button">📚 Take the Quiz</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Book Recommendations -->
+    <section class="book-recommendations section-2" id="books">
+        <div class="section-overlay">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">📖 My Picks for You</h2>
+                    <p class="section-subtitle">Books that made me laugh, cry, and stay up too late turning pages.</p>
+                </div>
+                
+                <div class="books-grid">
+                    <div class="book-card">
+                        <a href="https://www.amazon.com/s?k=Better+Than+the+Movies+Lynn+Painter" target="_blank" rel="noopener noreferrer" class="book-link">
+                            <div class="book-cover">
+                                <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=450&fit=crop&crop=center" alt="Better Than the Movies book cover" class="book-image" loading="lazy">
+                            </div>
+                            <h3 class="book-title">Better Than the Movies</h3>
+                            <p class="book-blurb">A sweet, swoony rom-com.</p>
+                            <span class="amazon-badge">View on Amazon →</span>
+                        </a>
+                    </div>
+
+                    <div class="book-card">
+                        <a href="https://www.amazon.com/s?k=Throne+of+Glass+Sarah+J+Maas" target="_blank" rel="noopener noreferrer" class="book-link">
+                            <div class="book-cover">
+                                <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=450&fit=crop&crop=center" alt="Throne of Glass book cover" class="book-image" loading="lazy">
+                            </div>
+                            <h3 class="book-title">Throne of Glass</h3>
+                            <p class="book-blurb">Epic fantasy with magic and danger.</p>
+                            <span class="amazon-badge">View on Amazon →</span>
+                        </a>
+                    </div>
+
+                    <div class="book-card">
+                        <a href="https://www.amazon.com/s?k=If+He+Had+Been+With+Me+Laura+Nowlin" target="_blank" rel="noopener noreferrer" class="book-link">
+                            <div class="book-cover">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=450&fit=crop&crop=center" alt="If He Had Been With Me book cover" class="book-image" loading="lazy">
+                            </div>
+                            <h3 class="book-title">If He Had Been With Me</h3>
+                            <p class="book-blurb">A heartbreaking contemporary about love and loss.</p>
+                            <span class="amazon-badge">View on Amazon →</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Writing Journey -->
+    <section class="writing-journey section-3" id="writing">
+        <div class="section-overlay">
+            <div class="container">
+                <div class="journey-content">
+                    <h2 class="section-title">📝 Writing in the Rain</h2>
+                    <p class="journey-intro">
+                        I'm an aspiring author, crafting stories in the quiet moments between rain showers. 
+                        This is where I share the messy, exciting journey of bringing characters to life.
+                    </p>
+                    
+                    <ul class="journey-updates">
+                        <li>Hit 3,000 words this week — my characters are finally starting to argue back.</li>
+                        <li>Debating settings: should I keep the stormy castle or move it to the sea?</li>
+                    </ul>
+                    
+                    <a href="#" class="cta-button secondary">Follow the Journey</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Cool Interactive Quiz Section -->
+    <section class="quiz-section section-4" id="quiz">
+        <div class="section-overlay">
+            <div class="container">
+                <div class="quiz-content">
+                    <h2 class="section-title animated-title">🎯 Find Your Perfect Book Match</h2>
+                    <p class="quiz-subtitle">Answer a few magical questions to discover your next literary adventure</p>
+                    
+                    <div class="quiz-container" id="quizContainer">
+                        <!-- Quiz Progress Bar -->
+                        <div class="quiz-progress-wrapper">
+                            <div class="quiz-progress-bar">
+                                <div class="quiz-progress-fill" id="quizProgress"></div>
+                                <div class="quiz-progress-glow"></div>
+                            </div>
+                            <div class="quiz-progress-text">
+                                <span class="current-q">1</span> / <span class="total-q">5</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Quiz Questions -->
+                        <div class="quiz-questions">
+                            <!-- Question 1 -->
+                            <div class="quiz-question active" data-question="1">
+                                <h3 class="question-title">📚 What reading mood are you in?</h3>
+                                <div class="quiz-options">
+                                    <button class="quiz-option" data-answer="romantic">
+                                        <span class="option-icon">💕</span>
+                                        <span class="option-text">Swoony Romance</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="adventure">
+                                        <span class="option-icon">⚔️</span>
+                                        <span class="option-text">Epic Adventure</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="mystery">
+                                        <span class="option-icon">🔍</span>
+                                        <span class="option-text">Mind-Bending Mystery</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="fantasy">
+                                        <span class="option-icon">🐉</span>
+                                        <span class="option-text">Magical Fantasy</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 2 -->
+                            <div class="quiz-question" data-question="2">
+                                <h3 class="question-title">🌙 Perfect reading spot?</h3>
+                                <div class="quiz-options">
+                                    <button class="quiz-option" data-answer="cozy">
+                                        <span class="option-icon">☕</span>
+                                        <span class="option-text">Cozy Café Corner</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="nature">
+                                        <span class="option-icon">🌲</span>
+                                        <span class="option-text">Under a Tree</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="rain">
+                                        <span class="option-icon">🌧️</span>
+                                        <span class="option-text">By the Rainy Window</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="bed">
+                                        <span class="option-icon">🛏️</span>
+                                        <span class="option-text">Snuggled in Bed</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 3 -->
+                            <div class="quiz-question" data-question="3">
+                                <h3 class="question-title">✨ What draws you into a story?</h3>
+                                <div class="quiz-options">
+                                    <button class="quiz-option" data-answer="characters">
+                                        <span class="option-icon">👥</span>
+                                        <span class="option-text">Complex Characters</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="plot">
+                                        <span class="option-icon">🎢</span>
+                                        <span class="option-text">Twisty Plots</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="world">
+                                        <span class="option-icon">🗺️</span>
+                                        <span class="option-text">Rich Worldbuilding</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="emotions">
+                                        <span class="option-icon">💭</span>
+                                        <span class="option-text">Deep Emotions</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 4 -->
+                            <div class="quiz-question" data-question="4">
+                                <h3 class="question-title">⏱️ How long should your next read be?</h3>
+                                <div class="quiz-options">
+                                    <button class="quiz-option" data-answer="quick">
+                                        <span class="option-icon">⚡</span>
+                                        <span class="option-text">Quick Read (< 300 pages)</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="medium">
+                                        <span class="option-icon">📖</span>
+                                        <span class="option-text">Just Right (300-500)</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="epic">
+                                        <span class="option-icon">📚</span>
+                                        <span class="option-text">Epic Saga (500+)</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="series">
+                                        <span class="option-icon">📚📚</span>
+                                        <span class="option-text">Give Me a Series!</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 5 -->
+                            <div class="quiz-question" data-question="5">
+                                <h3 class="question-title">🎭 How should the story end?</h3>
+                                <div class="quiz-options">
+                                    <button class="quiz-option" data-answer="happy">
+                                        <span class="option-icon">🌈</span>
+                                        <span class="option-text">Happily Ever After</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="tears">
+                                        <span class="option-icon">😭</span>
+                                        <span class="option-text">Beautiful Tears</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="twist">
+                                        <span class="option-icon">😱</span>
+                                        <span class="option-text">Mind-Blowing Twist</span>
+                                    </button>
+                                    <button class="quiz-option" data-answer="open">
+                                        <span class="option-icon">💭</span>
+                                        <span class="option-text">Open to Interpretation</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quiz Navigation -->
+                        <div class="quiz-navigation">
+                            <button class="quiz-nav-btn prev-btn" id="prevBtn" disabled>
+                                <span>← Previous</span>
+                            </button>
+                            <button class="quiz-nav-btn next-btn" id="nextBtn" disabled>
+                                <span>Next →</span>
+                            </button>
+                            <button class="quiz-nav-btn submit-btn" id="submitBtn" style="display: none;">
+                                <span>✨ Get My Book Match!</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Quiz Results (Initially Hidden) -->
+                        <div class="quiz-results" id="quizResults" style="display: none;">
+                            <div class="results-animation">
+                                <span class="sparkle">✨</span>
+                                <span class="sparkle">📚</span>
+                                <span class="sparkle">✨</span>
+                            </div>
+                            <h3 class="results-title">Your Perfect Book Match!</h3>
+                            <div class="book-recommendation" id="bookRecommendation">
+                                <!-- Recommendation will be inserted here -->
+                            </div>
+                            <button class="quiz-restart" id="restartQuiz">
+                                <span>🔄 Take Quiz Again</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <blockquote class="footer-quote">
+                "There is no friend as loyal as a book. — Hemingway"
+            </blockquote>
+            
+            <div class="footer-links">
+                <a href="#" class="footer-link">📺 BookTube</a>
+                <a href="#" class="footer-link">📸 Instagram</a>
+                <a href="#" class="footer-link">📧 Newsletter</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading indicator -->
+    <div id="loading-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s ease;">
+        <div style="color:white;font-size:1.5rem;font-family:'Crimson Text',serif;">Loading your cozy corner...</div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        // Remove loading overlay when page is ready
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loader = document.getElementById('loading-overlay');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.remove(), 500);
+                }
+            }, 300);
+        });
+    </script>
+</body>
+</html>
