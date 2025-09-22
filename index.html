@@ -1372,31 +1372,22 @@
       // First try: existing cover URL
       if(book.coverUrl && book.coverUrl.length > 10) {
         console.log('✅ Using existing cover URL');
-        return book.coverUrl;
+        return book.coverUrl.replace('http://', 'https://');
       }
       
-      // Second try: ISBN lookup
-      if(book.isbn) {
-        console.log('📚 Trying ISBN lookup');
-        const isbnCover = olByISBN(book.isbn);
-        // Test if ISBN cover loads
-        try {
-          const response = await fetch(isbnCover, { method: 'HEAD' });
-          if (response.ok) {
-            console.log('✅ ISBN cover found');
-            return isbnCover;
-          }
-        } catch (e) {
-          console.log('⚠️ ISBN cover not available');
-        }
-      }
-      
-      // Third try: Google Books search
+      // Second try: Google Books search (works better with CORS)
       console.log('🔍 Searching Google Books for cover');
       const googleCover = await googleThumbByQuery(`${book.title} ${book.author || ''}`);
       if (googleCover) {
         console.log('✅ Google Books cover found');
         return googleCover;
+      }
+      
+      // Third try: ISBN lookup (direct image load, no HEAD request)
+      if(book.isbn) {
+        console.log('📚 Using ISBN for cover');
+        // Just return the URL and let the image onerror handle failures
+        return olByISBN(book.isbn);
       }
       
       // Fallback: placeholder
@@ -1500,7 +1491,10 @@
         
         img.onerror = ()=> {
           console.log(`🖼️ Using placeholder for "${b.title}"`);
-          img.src = placeholderSVG(b.title);
+          // Prevent infinite loop by checking if we're already showing placeholder
+          if (!img.src.startsWith('data:')) {
+            img.src = placeholderSVG(b.title);
+          }
         };
         
         // Add image to cover container
@@ -1727,18 +1721,18 @@
       });
     }
 
-    // TOP 10 books with real recommendations
+    // TOP 10 books with real recommendations (with ISBNs for better cover loading)
     const TOP10 = [
-      {title:'My Friends', author:'Fredrik Backman', review:'The language is stunning. If you need a heart-wrenching read that tears you apart and puts you back together at the same time, this is it. The unexpected twists and character arcs got me every time; it\'s carefully crafted and easily one of the best books I\'ve ever read.', tags:['Literary Fiction', 'Emotional']},
-      {title:'The Inheritance Games', author:'Jennifer Lynn Barnes', review:'I love the twists, the characters, and the mystery. I read it over a year ago and still think about it every day. The story clicks together in a beautiful chain of events that leads to an amazing conclusion.', tags:['Mystery', 'Thriller']},
-      {title:'Powerless', author:'Lauren Roberts', review:'This book was everything. I was skeptical about the hype, but it completely delivers. The plot and characters are fantastic, and they work together in a spectacular way.', tags:['Fantasy', 'Romance']},
-      {title:'The Queen\'s Gambit', author:'Walter Tevis', review:'The first book I ever felt was worth annotating. Watching this character grow through her journey is incredible, and the ending is the only way a masterpiece like this could close.', tags:['Literary Fiction', 'Character Study']},
-      {title:'Eleanor & Park', author:'Rainbow Rowell', review:'This book has my heart forever. I often find myself on the closet floor rereading lines. The young love here fixes and breaks your heart over and over again. Un-put-down-able and a must-read.', tags:['Contemporary', 'Young Adult']},
-      {title:'Daughter of the Pirate King', author:'Tricia Levenseller', review:'One of the books that got me into reading. I loved seeing a female Jack Sparrow beat up some dudes. The romance subplot gave me even more to be excited about—I absolutely love this book.', tags:['Fantasy', 'Adventure']},
-      {title:'Six of Crows', author:'Leigh Bardugo', review:'The found-family energy is incredible. The heist is thrilling, and the twists and turns kept me hooked.', tags:['Fantasy', 'Heist']},
-      {title:'Blade of Secrets', author:'Tricia Levenseller', review:'A fresh take on a female main character who\'s brilliant and also a total bada**. I love her—and the romance subplot.', tags:['Fantasy', 'Strong Female Lead']},
-      {title:'Check & Mate', author:'Ali Hazelwood', review:'A perfect YA that shows the ins and outs of chess and young love—one of my favorites from this author.', tags:['Young Adult', 'Contemporary']},
-      {title:'The Nightingale', author:'Kristin Hannah', review:'An amazing story of two sisters surviving in an oppressive world, coping differently and finding ways to live during World War II.', tags:['Historical Fiction', 'WWII']}
+      {title:'My Friends', author:'Fredrik Backman', isbn:'1501157566', review:'The language is stunning. If you need a heart-wrenching read that tears you apart and puts you back together at the same time, this is it. The unexpected twists and character arcs got me every time; it\'s carefully crafted and easily one of the best books I\'ve ever read.', tags:['Literary Fiction', 'Emotional']},
+      {title:'The Inheritance Games', author:'Jennifer Lynn Barnes', isbn:'1368052401', review:'I love the twists, the characters, and the mystery. I read it over a year ago and still think about it every day. The story clicks together in a beautiful chain of events that leads to an amazing conclusion.', tags:['Mystery', 'Thriller']},
+      {title:'Powerless', author:'Lauren Roberts', isbn:'1665955074', review:'This book was everything. I was skeptical about the hype, but it completely delivers. The plot and characters are fantastic, and they work together in a spectacular way.', tags:['Fantasy', 'Romance']},
+      {title:'The Queen\'s Gambit', author:'Walter Tevis', isbn:'0593314654', review:'The first book I ever felt was worth annotating. Watching this character grow through her journey is incredible, and the ending is the only way a masterpiece like this could close.', tags:['Literary Fiction', 'Character Study']},
+      {title:'Eleanor & Park', author:'Rainbow Rowell', isbn:'1250012570', review:'This book has my heart forever. I often find myself on the closet floor rereading lines. The young love here fixes and breaks your heart over and over again. Un-put-down-able and a must-read.', tags:['Contemporary', 'Young Adult']},
+      {title:'Daughter of the Pirate King', author:'Tricia Levenseller', isbn:'1250095964', review:'One of the books that got me into reading. I loved seeing a female Jack Sparrow beat up some dudes. The romance subplot gave me even more to be excited about—I absolutely love this book.', tags:['Fantasy', 'Adventure']},
+      {title:'Six of Crows', author:'Leigh Bardugo', isbn:'1627792120', review:'The found-family energy is incredible. The heist is thrilling, and the twists and turns kept me hooked.', tags:['Fantasy', 'Heist']},
+      {title:'Blade of Secrets', author:'Tricia Levenseller', isbn:'1250756073', review:'A fresh take on a female main character who\'s brilliant and also a total bada**. I love her—and the romance subplot.', tags:['Fantasy', 'Strong Female Lead']},
+      {title:'Check & Mate', author:'Ali Hazelwood', isbn:'0593619919', review:'A perfect YA that shows the ins and outs of chess and young love—one of my favorites from this author.', tags:['Young Adult', 'Contemporary']},
+      {title:'The Nightingale', author:'Kristin Hannah', isbn:'1250080401', review:'An amazing story of two sisters surviving in an oppressive world, coping differently and finding ways to live during World War II.', tags:['Historical Fiction', 'WWII']}
     ];
     // Render books and set up initial animation state
     renderBooks(TOP10, document.getElementById('top10')).then(() => {
